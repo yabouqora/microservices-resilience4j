@@ -1,0 +1,86 @@
+management:
+  health:
+    ## active circuit breaker
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: beans, health
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      adresseService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 3s
+        permittedNumberOfCallsInHalfOpenState: 3  #change state to closed or opened
+        slidingWindowSize: 10
+        sliding-window-type: count_based  # or timer_based
+  bulkhead:
+    instances:
+      adresseService:
+        max-concurrent-calls: 5
+        max-wait-duration: 0
+  ratelimiter:
+    instances:
+      adresseService:
+        limit-for-period: 2
+        limit-refresh-period: 3s
+        timeout-duration: 0
+  retry:
+    instances:
+      adresseService:
+        max-attempts: 2
+        wait-duration: 5s
+        retry-exceptions:
+          - org.springframework.web.client.ResourceAccessException
+  timelimiter:
+    instances:
+      adresseService:
+        timeout-duration:
+          1ms
+        cancel-running-future: false
+
+
+// controlleur
+
+  public List<Adresse> getDefaultAdresses(Exception e){
+        return Stream.of(
+                Adresse.builder()
+                        .rue("rue inconue")
+                        .codePostal("code inconue")
+                        .ville("ville inconue")
+                        .idPersonne(0L)
+                        .personne(null)
+                        .build()
+        ).collect(Collectors.toList());
+    }
+    public Adresse getDefaultAdress(Exception e){
+        return
+                Adresse.builder()
+                        .rue("rue inconue")
+                        .codePostal("code inconue")
+                        .ville("ville inconue")
+                        .idPersonne(0L)
+                        .personne(null)
+                        .build();
+    }
+
+    public ResponseEntity<String> getMessageFallBack(RequestNotPermitted exception) {
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .body("Too many requests : No further request will be accepted. Please try after sometime");
+    }
+    public String getInvoiceFallback(ResourceAccessException e) {
+        return "SERVICE IS DOWN, PLEASE TRY AFTER SOMETIME !!!";
+    }

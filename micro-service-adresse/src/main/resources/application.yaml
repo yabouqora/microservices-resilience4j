@@ -1,0 +1,96 @@
+spring:
+  application:
+    name: ADRESSE-SERVICE
+  config:
+    import: optional:consul:localhost:8500
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: adresse-service
+      config:
+        format: YAML
+        prefix: config
+        default-context: adresse-service
+        data-key: data
+  datasource:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.pwd}
+  jpa:
+    hibernate:
+      ddl-auto: ${jpa.ddl}
+      naming:
+        physical-strategy: ${jpa.naming-strategy}
+    properties:
+      hibernate:
+        dialect: ${jpa.dialect}
+        show_sql: ${jpa.show-sql}
+server:
+  port: ${server.port}
+## config actuator
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  ## config resilience4j
+resilience4j:
+  circuitbreaker:
+    instances:
+      adresseService:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 4
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 3s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        sliding-window-type: count_based
+  retry:
+    instances:
+      adresseService:
+        max-attempts: 5
+        wait-duration: 10s
+  ratelimiter:
+    instances:
+      adresseService:
+        limitForPeriod: 2
+        limitRefreshPeriod: 15s
+        timeoutDuration: 5s
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 100
+  bulkhead:
+    instances:
+      adresseService:
+        max-concurrent-calls: 2 #indicates that if the number of concurrent calls exceed 	5, activate the fallback method.
+        max-wait-duration: 5s #indicates that don’t wait for anything, show response immediately based on the configuration.
+  timelimiter:
+    instances:
+      adresseService:
+        timeout-duration: 1ms #indicates that the maximum amount of time a request can take to respond is 1 millisecond
+        cancel-running-future: false #indicates that do not cancel the Running Completable Futures After TimeOut.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: PERSONNE-SERVICE
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: PERSONNE-SERVICE
+      config:
+        format: YAML
+        prefix: config
+        default-context: personne-service
+        data-key: data
+  datasource:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.pwd}
+  jpa:
+    hibernate:
+      ddl-auto: ${jpa.ddl}
+      naming:
+        physical-strategy: ${jpa.naming-strategy}
+    properties:
+      hibernate:
+        dialect: ${jpa.dialect}
+    show-sql: ${jpa.show-sql}
+  config:
+    import: optional:consul:localhost:8500
+server:
+  port: ${server.port}

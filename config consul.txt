@@ -1,0 +1,35 @@
+//config/personne-service/data 
+
+db: 
+ url: jdbc:mysql://localhost:3306/microservice_personne?createDatabaseIfNotExist=true
+ username: root
+ pwd: root
+jpa:
+ ddl: create-drop
+ dialect: org.hibernate.dialect.MySQLDialect
+ naming-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+ show-sql: true
+server: 
+ port: 8081
+ context-path: /api
+
+//config/adresse-service/data 
+
+db: 
+ url: jdbc:mysql://localhost:3306/microservice_adresse?createDatabaseIfNotExist=true
+ username: root
+ pwd: root
+jpa:
+ ddl: create-drop
+ dialect: org.hibernate.dialect.MySQLDialect
+ naming-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+ show-sql: true
+server: 
+ port: 8082
+ context-path: /api
+
+//config/gateway-service/routes 
+
+server: 
+ port: 8080
+ 

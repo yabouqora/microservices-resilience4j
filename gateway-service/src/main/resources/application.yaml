@@ -1,0 +1,21 @@
+server:
+  port: ${server.port}
+spring:
+  config:
+    import: optional:consul:localhost:8500
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: gateway-service
+      config:
+        format : YAML
+        prefix: config
+        default-context: gateway-service
+        data-key: routes
+  application:
+    name: gateway-service
+resilience4j:
+  ci
+

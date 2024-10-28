@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/gateway-service/gateway-service.iml" filepath="$PROJECT_DIR$/gateway-service/gateway-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/micro-service-adresse/micro-service-adresse.iml" filepath="$PROJECT_DIR$/micro-service-adresse/micro-service-adresse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/micro-service-personne/micro-service-personne.iml" filepath="$PROJECT_DIR$/micro-service-personne/micro-service-personne.iml" />
+      <module fileurl="file://$PROJECT_DIR$/microservices-resilience4j.iml" filepath="$PROJECT_DIR$/microservices-resilience4j.iml" />
+    </modules>
+  </component>
+</project>
